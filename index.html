@@ -1,322 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows 7 in Browser</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-            max-width: 1200px;
-            width: 100%;
-        }
-        
-        .header {
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            margin-bottom: 5px;
-        }
-        
-        .header p {
-            opacity: 0.8;
-            font-size: 14px;
-        }
-        
-        .controls {
-            padding: 15px 20px;
-            background: #ecf0f1;
-            border-bottom: 2px solid #bdc3c7;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .control-group label {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .control-group input {
-            padding: 5px 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 4px;
-            width: 80px;
-        }
-        
-        button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-        
-        button:hover {
-            background: #2980b9;
-        }
-        
-        button:disabled {
-            background: #95a5a6;
-            cursor: not-allowed;
-        }
-        
-        .status {
-            flex: 1;
-            text-align: right;
-            font-size: 14px;
-            color: #7f8c8d;
-            font-weight: 600;
-        }
-        
-        .emulator-container {
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            min-height: 600px;
-            position: relative;
-        }
-        
-        #screen {
-            border: 2px solid #34495e;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            max-width: 100%;
-            height: auto;
-            display: none;
-        }
-        
-        .loading {
-            text-align: center;
-            color: white;
-        }
-        
-        .loading-spinner {
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .info {
-            padding: 20px;
-            background: #f8f9fa;
-        }
-        
-        .info h3 {
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-        
-        .info ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        
-        .info li {
-            padding: 5px 0;
-            color: #555;
-        }
-        
-        .info li:before {
-            content: "→ ";
-            color: #3498db;
-            font-weight: bold;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.2);
-            position: absolute;
-            bottom: 0;
-            left: 0;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: #3498db;
-            width: 0%;
-            transition: width 0.3s;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windows 7 in Browser</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px}.container{background:white;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden;max-width:1200px;width:100%}.header{background:#2c3e50;color:white;padding:20px;text-align:center}.header h1{margin-bottom:5px}.header p{opacity:.8;font-size:14px}.controls{padding:15px 20px;background:#ecf0f1;border-bottom:2px solid #bdc3c7;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.control-group{display:flex;align-items:center;gap:8px}.control-group label{font-weight:600;font-size:14px}.control-group input{padding:5px 10px;border:1px solid #bdc3c7;border-radius:4px;width:80px}button{background:#3498db;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:600;transition:background .3s}button:hover{background:#2980b9}button:disabled{background:#95a5a6;cursor:not-allowed}.status{flex:1;text-align:right;font-size:14px;color:#7f8c8d;font-weight:600}.emulator-container{background:#000;display:flex;justify-content:center;align-items:center;padding:20px;min-height:600px;position:relative}#screen{border:2px solid #34495e;box-shadow:0 4px 20px rgba(0,0,0,0.5);max-width:100%;height:auto;display:none}.loading{text-align:center;color:white}.loading-spinner{border:4px solid rgba(255,255,255,.3);border-top:4px solid white;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:20px auto}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}.info{padding:20px;background:#f8f9fa}.info h3{margin-bottom:10px;color:#2c3e50}.info ul{list-style:none;padding-left:0}.info li{padding:5px 0;color:#555}.info li:before{content:"→ ";color:#3498db;font-weight:bold}.progress-bar{width:100%;height:4px;background:rgba(255,255,255,.2);position:absolute;bottom:0;left:0}.progress-fill{height:100%;background:#3498db;width:0%;transition:width .3s}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🖥️ Windows 7 in Browser</h1>
-            <p>x86 Emulation powered by Halfix + WebAssembly</p>
-        </div>
-        
-        <div class="controls">
-            <div class="control-group">
-                <label>RAM (MB):</label>
-                <input type="number" id="ram" value="1024" min="512" max="2048" step="128">
-            </div>
-            <div class="control-group">
-                <label>VRAM (MB):</label>
-                <input type="number" id="vram" value="256" min="64" max="512" step="64">
-            </div>
-            <button id="startBtn" onclick="startEmulator()">▶ Start Windows 7</button>
-            <button id="resetBtn" onclick="resetEmulator()" disabled>🔄 Reset</button>
-            <button id="fullscreenBtn" onclick="toggleFullscreen()" disabled>⛶ Fullscreen</button>
-            <div class="status" id="status">Ready to start</div>
-        </div>
-        
-        <div class="emulator-container" id="emulatorContainer">
-            <div class="loading" id="loading">
-                <div class="loading-spinner"></div>
-                <p>Click "Start Windows 7" to begin</p>
-                <p id="loadingText" style="margin-top: 10px; font-size: 14px;"></p>
-            </div>
-            <canvas id="screen" width="1024" height="768"></canvas>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-        </div>
-        
-        <div class="info">
-            <h3>⚠️ Important Notes:</h3>
-            <ul>
-                <li>First boot will take 5-15 minutes (downloading and caching disk chunks)</li>
-                <li>Windows 7 requires at least 1024 MB RAM to boot</li>
-                <li>Performance will be slower than native (browser-based emulation)</li>
-                <li>Use mouse and keyboard normally - click inside to capture</li>
-                <li>Press ESC to release mouse capture</li>
-            </ul>
-        </div>
-    </div>
-
-    <script>
-        let emulatorRunning = false;
-        
-        function updateStatus(message, progress) {
-            document.getElementById('status').textContent = message;
-            if (progress !== undefined) {
-                document.getElementById('progressFill').style.width = progress + '%';
-            }
-        }
-        
-        function startEmulator() {
-            const ram = parseInt(document.getElementById('ram').value);
-            const vram = parseInt(document.getElementById('vram').value);
-            
-            if (ram < 1024) {
-                alert('Windows 7 requires at least 1024 MB RAM to boot properly!');
-                return;
-            }
-            
-            // Update UI
-            document.getElementById('startBtn').disabled = true;
-            document.getElementById('resetBtn').disabled = false;
-            document.getElementById('fullscreenBtn').disabled = false;
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('screen').style.display = 'block';
-            
-            updateStatus('Initializing Halfix...', 0);
-            document.getElementById('loadingText').textContent = 'Loading WebAssembly module...';
-            
-            // Simulate loading process (replace with actual Halfix initialization)
-            let progress = 0;
-            const loadingInterval = setInterval(() => {
-                progress += 2;
-                if (progress <= 100) {
-                    updateStatus('Loading Windows 7...', progress);
-                    if (progress < 30) {
-                        document.getElementById('loadingText').textContent = 'Initializing emulator...';
-                    } else if (progress < 60) {
-                        document.getElementById('loadingText').textContent = 'Loading disk chunks...';
-                    } else if (progress < 90) {
-                        document.getElementById('loadingText').textContent = 'Starting BIOS...';
-                    } else {
-                        document.getElementById('loadingText').textContent = 'Booting Windows 7...';
-                    }
-                } else {
-                    clearInterval(loadingInterval);
-                    document.getElementById('loading').style.display = 'none';
-                    updateStatus('Running', 100);
-                    emulatorRunning = true;
-                }
-            }, 100);
-            
-            // TODO: Actual Halfix initialization here
-            // This is where you'll integrate with libhalfix.js
-            console.log('Starting Halfix with:', {
-                ram: ram + 'MB',
-                vram: vram + 'MB',
-                disk: 'images/windows7/info.json'
-            });
-        }
-        
-        function resetEmulator() {
-            if (confirm('Reset Windows 7? All unsaved changes will be lost.')) {
-                location.reload();
-            }
-        }
-        
-        function toggleFullscreen() {
-            const canvas = document.getElementById('screen');
-            if (!document.fullscreenElement) {
-                canvas.requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
-        }
-        
-        // Update settings display
-        document.getElementById('ram').addEventListener('input', function() {
-            updateStatus(`Settings: ${this.value} MB RAM, ${document.getElementById('vram').value} MB VRAM`);
-        });
-        
-        document.getElementById('vram').addEventListener('input', function() {
-            updateStatus(`Settings: ${document.getElementById('ram').value} MB RAM, ${this.value} MB VRAM`);
-        });
-    </script>
-    
-    <!-- Load Halfix after the page loads -->
-    <script src="halfix.js"></script>
-    <script src="libhalfix.js"></script>
+<div class="container">
+<div class="header">
+<h1>🖥️ Windows 7 in Browser</h1>
+<p>x86 Emulation powered by Halfix + WebAssembly</p>
+</div>
+<div class="controls">
+<div class="control-group">
+<label>RAM (MB):</label>
+<input type="number" id="ram" value="1024" min="512" max="2048" step="128">
+</div>
+<div class="control-group">
+<label>VRAM (MB):</label>
+<input type="number" id="vram" value="256" min="64" max="512" step="64">
+</div>
+<button id="startBtn" onclick="startEmulator()">▶ Start Windows 7</button>
+<button id="resetBtn" onclick="resetEmulator()" disabled>🔄 Reset</button>
+<button id="fullscreenBtn" onclick="toggleFullscreen()" disabled>⛶ Fullscreen</button>
+<div class="status" id="status">Ready to start</div>
+</div>
+<div class="emulator-container" id="emulatorContainer">
+<div class="loading" id="loading">
+<div class="loading-spinner"></div>
+<p>Click "Start Windows 7" to begin</p>
+<p id="loadingText" style="margin-top:10px;font-size:14px;"></p>
+</div>
+<canvas id="screen" width="1024" height="768"></canvas>
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+</div>
+<div class="info">
+<h3>⚠️ Important Notes:</h3>
+<ul>
+<li>First boot will take 5-15 minutes (downloading and caching disk chunks)</li>
+<li>Windows 7 requires at least 1024 MB RAM to boot</li>
+<li>Performance will be slower than native (browser-based emulation)</li>
+<li>Use mouse and keyboard normally - click inside to capture</li>
+<li>Press ESC to release mouse capture</li>
+</ul>
+</div>
+</div>
+<script>
+let emulatorRunning=false;
+function updateStatus(message,progress){document.getElementById('status').textContent=message;if(progress!==undefined){document.getElementById('progressFill').style.width=progress+'%'}}
+function startEmulator(){const ram=parseInt(document.getElementById('ram').value);const vram=parseInt(document.getElementById('vram').value);if(ram<1024){alert('Windows 7 requires at least 1024 MB RAM to boot properly!');return}document.getElementById('startBtn').disabled=true;document.getElementById('resetBtn').disabled=false;document.getElementById('fullscreenBtn').disabled=false;document.getElementById('loading').style.display='block';document.getElementById('screen').style.display='block';updateStatus('Initializing Halfix...',0);document.getElementById('loadingText').textContent='Loading WebAssembly module...';Module.onRuntimeInitialized=function(){document.getElementById('loading').style.display='none';updateStatus('Running',100);emulatorRunning=true;Halfix.start({ram:ram,vram:vram,disk:'images/windows7/info.json',canvas:document.getElementById('screen')})}}
+function resetEmulator(){if(confirm('Reset Windows 7? All unsaved changes will be lost.')){location.reload()}}
+function toggleFullscreen(){const canvas=document.getElementById('screen');if(!document.fullscreenElement){canvas.requestFullscreen()}else{document.exitFullscreen()}}
+document.getElementById('ram').addEventListener('input',function(){updateStatus(`Settings: ${this.value} MB RAM, ${document.getElementById('vram').value} MB VRAM`)})
+document.getElementById('vram').addEventListener('input',function(){updateStatus(`Settings: ${document.getElementById('ram').value} MB RAM, ${this.value} MB VRAM`)})
+</script>
+<script>
+var Module={locateFile:function(path){if(path.endsWith('.wasm'))return'halfix.wasm';return path}};
+</script>
+<script src="halfix.js"></script>
+<script src="libhalfix.js"></script>
 </body>
 </html>
